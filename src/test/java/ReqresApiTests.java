@@ -6,6 +6,41 @@ import static org.hamcrest.Matchers.is;
 
 public class ReqresApiTests {
     @Test
+    void listUserPage2() {
+        given()
+                .contentType(JSON)
+                .when()
+                .get("https://reqres.in/api/users?page=2")
+                .then()
+                .statusCode(200)
+                .body("page", is(2));
+    }
+
+    @Test
+    void singleUser() {
+        given()
+                .contentType(JSON)
+                .when()
+                .get("https://reqres.in/api/users/2")
+                .then()
+                .statusCode(200)
+                .body("data.id", is(2))
+                .body("data.email", is("janet.weaver@reqres.in"))
+                .body("data.first_name", is("Janet"))
+                .body("data.last_name", is("Weaver"));
+    }
+
+    @Test
+    void singleUserNotFound() {
+        given()
+                .contentType(JSON)
+                .when()
+                .get("https://reqres.in/api/users/23")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     void successfulLogin() {
         given()
                 .contentType(JSON)
@@ -29,4 +64,5 @@ public class ReqresApiTests {
                 .statusCode(400)
                 .body("error", is("Missing password"));
     }
+
 }
